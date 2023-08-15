@@ -1,4 +1,4 @@
 # Menu Restorant React
-Menu de restorant con sesion para crear el menu
+Menu de restorant con sesion de usuario, para crear el menu y editarlo.
 
-Pagina web :
+Pagina web : 

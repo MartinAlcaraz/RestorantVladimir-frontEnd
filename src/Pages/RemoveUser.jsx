@@ -3,26 +3,20 @@ import useFetch from '../Utils/useFetch';
 import { useNavigate } from 'react-router-dom';
 import ModalLoading from '../components/ModalLoading';
 import { useForm } from 'react-hook-form';
-import Layuot from '../components/Layout';
+import Layout from '../components/Layout';
 import Card from '../components/Card';
-import ModalDelete from '../components/ModalDelete';
-import useConfirm from '../Utils/useConfirm';
-import ModalMessage from '../components/ModalMessage';
+import useConfirmDelete from '../Utils/useConfirmDelete';
+import useModalMessage from '../Utils/useModalMessage';
 
 function RemoveUser({ user }) {
 
     const [errorMessage, loading, sendHttpRequest] = useFetch();
     const [users, setUsers] = useState([]);
-    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [showModalDelete, setShowModalDelete] = useState(false);
-    const [showModalMessage, setShowModalMessage] = useState(false);
-    const [message, setMessage] = useState("");
 
-    const [Dialog, confirmDelete] = useConfirm(
-        'Eliminar usuario',
-        'Esta seguro que desea eliminar el usuario ?'
-    );
+    const [AcceptDialog, setModalMessage, accept] = useModalMessage();
+
+    const [ConfirmationDialog, confirmDelete] = useConfirmDelete('Eliminar usuario' ,'Esta seguro que desea eliminar el usuario?'); // return a Component and a function
 
     const navigate = useNavigate();
     const { register, handleSubmit, reset, setError, trigger, getValues, formState: { errors, isValid } } = useForm({
@@ -38,7 +32,10 @@ function RemoveUser({ user }) {
     }
 
     useEffect(() => {
-        requestUsers();
+        // solo se solicita la lista de usuarios si el usuario es Admin.
+        if (user.isAdmin){
+            requestUsers();
+        }
     }, []);
 
     // setea el email del usuario seleccionado en el input select
@@ -51,15 +48,17 @@ function RemoveUser({ user }) {
         }
     }
 
-    const deleteUser = (res, data) => {
+    const deleteUser = async (res, data) => {
 
         if (res.status == 200) {
-            setMessage("El usuario ha sido eliminado");
-            setShowModalMessage(true);
+            setModalMessage("Exito","El usuario ha sido eliminado", false);
             requestUsers();
+            setEmail('');
+            reset();
+            await accept();
         }else{
-            setMessage("No fue posible eliminar el usuario");
-            setShowModalMessage(true);
+            setModalMessage("Error","No fue posible eliminar el usuario", true);
+            await accept();
         }
     }
 
@@ -68,7 +67,6 @@ function RemoveUser({ user }) {
     // data.nombre.split(",")[2];  // nombre del usuario a eliminar
 
     const onSubmit = async (data) => {
-        setShowModalDelete(true);
         const confirm = await confirmDelete();  // promesa del hook useConfirm();
 
         let formData = new FormData();
@@ -76,10 +74,7 @@ function RemoveUser({ user }) {
 
         if (confirm) {
             sendHttpRequest("/api/users", "DELETE", formData, deleteUser);
-            setShowModalDelete(false);
-        } else {
-            setShowModalDelete(false);
-        }
+        } 
     }
 
     // Error
@@ -89,27 +84,22 @@ function RemoveUser({ user }) {
     // If user is not Admin
     if (!user.isAdmin) {
         return (
-            <div className='bg-secondary min-h-[94vh] p-2' >
-                <h2 className='underline p-2'>Eliminar Usuario</h2>
-                <p className='p-2'>Solo el administrador puede eliminar un usuario.</p>
-            </div>
+            <Layout >
+                <h2 className='underline p-2 text-2xl'>Eliminar Usuario</h2>
+                <p className='p-2 text-base'>Solo el administrador puede eliminar un usuario.</p>
+            </Layout>
         )
     }
 
     return (
-        <Layuot>
+        <Layout>
             <Card>
                 <h3 className='p-4 text-center underline text-lg font-medium'>Eliminar Usuario</h3>
-                {loading && <ModalLoading />}
-                {
-                    // showModalDelete && <ModalDelete text={name} setShowModalDelete={setShowModalDelete} setResponse={setResponse}/>
-                }
-                {
-                    showModalDelete && <Dialog />
-                }
-                {
-                    showModalMessage && <ModalMessage setShowModalMessage={setShowModalMessage} message={message} />
-                }
+                
+                {/* ConfirmationDialog se muestra y oculta cuando se espera a confirmDelete() */}
+                <ConfirmationDialog />
+                
+                <AcceptDialog/>
 
                 <form className='p-2 pt-4' onSubmit={handleSubmit(onSubmit)}>
                     <label htmlFor='nombre'>Nombre: &nbsp;</label>
@@ -133,7 +123,7 @@ function RemoveUser({ user }) {
                     <input type='submit' value="Eliminar" className='boton'></input>
                 </form>
             </Card>
-        </Layuot>
+        </Layout>
     )
 }
 

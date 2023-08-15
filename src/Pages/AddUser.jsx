@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form';
 import ModalLoading from '../components/ModalLoading.jsx';
 import useFetch from '../Utils/useFetch.js';
 import ModalMessage from '../components/ModalMessage.jsx';
-import Loading from '../components/Loading.jsx'
 import Card from '../components/Card.jsx';
-import Layuot from '../components/Layout.jsx';
+import Layout from '../components/Layout.jsx';
+import useModalMessage from '../Utils/useModalMessage.jsx';
 
 function AddUser({ user }) {
 
@@ -17,17 +17,15 @@ function AddUser({ user }) {
     const navigate = useNavigate();
 
     const [errorMessage, loading, sendHttpRequest] = useFetch();
-    const [showModalMessage, setShowModalMessage] = useState(false);
-    const [message, setMessage] = useState("");
+
+    const [AcceptMessage, setModalMessage, accept] = useModalMessage();
 
     const createNewUserHandler = async (res, data) => {
-        console.log(res);
-        console.log(data);
 
         if (res.status == 201) {
-            setMessage("El usuario se ha creado!");
-            setShowModalMessage(true);
+            setModalMessage("Exito","El usuario se ha creado!",false);
             reset();
+            accept();
         } else {
             if (res.status == 409) {
                 setError("email", { message: "El email ya existe, usa otro." });
@@ -61,21 +59,20 @@ function AddUser({ user }) {
     // isn't Admin
     if (!user.isAdmin) {
         return (
-            <div className='bg-secondary min-h-[94vh] p-2' >
-                <h2 className='underline p-2'>Agregar Usuario</h2>
-                <p className='p-2'>Solo el administrador puede agregar un usuario.</p>
-            </div>
+            <Layout >
+                <h2 className='underline p-2 text-2xl'>Agregar Usuario</h2>
+                <p className='p-2 text-base'>Solo el administrador puede agregar un usuario.</p>
+            </Layout>
         )
     }
 
     return (
-        <Layuot>
+        <Layout>
             <Card>
                 <h1 className='text-xl text-center underline capitalize'>Agregar Usuario</h1>
-                {
-                    showModalMessage &&
-                    <ModalMessage setShowModalMessage={setShowModalMessage} message={message} />
-                }
+                
+                <AcceptMessage/>
+
                 {
                     loading && <ModalLoading />
                 }
@@ -84,7 +81,7 @@ function AddUser({ user }) {
                     {/*///////////////   Nombre   ////////////////*/}
                     <label htmlFor="nombre">Nombre del usuario: &nbsp;</label>
                     <br />
-                    <input type="text" name="nombre" className='input'
+                    <input type="text" name="nombre" className='input' autoFocus
                         {...register("nombre", {
                             required: "El nombre es requerido.",
                             pattern: { value: /^[a-zA-Z'-.,\s\d]+$/, message: "El nombre no puede contener caracteres especiales." },
@@ -129,7 +126,7 @@ function AddUser({ user }) {
 
                 </form>
             </Card>
-        </Layuot>
+        </Layout>
     )
 }
 

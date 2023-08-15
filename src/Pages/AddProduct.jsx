@@ -9,6 +9,7 @@ import Card from '../components/Card.jsx';
 import errorImg from '../icons/errorImg.svg';
 import iconImage from '../icons/imageIcon.svg';
 import Layout from '../components/Layout.jsx'
+import useModalMessage from '../Utils/useModalMessage.jsx';
 
 const AddProduct = () => {
     const { register, handleSubmit, reset, setError, trigger, formState: { errors, isValid } } = useForm({
@@ -19,8 +20,10 @@ const AddProduct = () => {
 
     const [errorMessage, loading, sendHttpRequest] = useFetch();
     const [categories, setCategories] = useState([]);
-    const [showModalMessage, setShowModalMessage] = useState(false);
-    const [message, setMessage] = useState("");
+    const [formSubmitted, setFormSubmitted] = useState(false);
+
+    const [AcceptDialog, setModalMessage, accept] = useModalMessage();
+
 
     const [loadingImg, setLoadingImg] = useState(false);
     const [selectedImg, setSelectedImg] = useState(iconImage);  // foto subida por el usuario
@@ -57,10 +60,10 @@ const AddProduct = () => {
     const createProductHandler = async (res) => {
 
         if (res.status == 201) {
-            setMessage("El producto se ha creado!");
-            setShowModalMessage(true);
+            setModalMessage("Exito", "El producto se ha creado!", false);
             setSelectedImg(iconImage);
             reset();
+            await accept();
         } else {
             if (res.status == 409) {
                 setError("nombre", { message: "El nombre del producto ya existe." });
@@ -68,17 +71,22 @@ const AddProduct = () => {
                 navigate('/error');
             }
         }
+        setFormSubmitted(false);
     }
 
     const onSubmit = async (data, e) => {
-        let formData = new FormData();
-        formData.append('categoryId', data.categoria);
-        formData.append('name', data.nombre);
-        formData.append('price', data.precio);
-        formData.append('description', data.descripcion);
-        formData.append('image', data.inputFile[0]);
+        if (formSubmitted == false) {
+            setFormSubmitted(true);
 
-        sendHttpRequest('/api/products', "POST", formData, createProductHandler);
+            let formData = new FormData();
+            formData.append('categoryId', data.categoria);
+            formData.append('name', data.nombre);
+            formData.append('price', data.precio);
+            formData.append('description', data.descripcion);
+            formData.append('image', data.inputFile[0]);
+
+            sendHttpRequest('/api/products', "POST", formData, createProductHandler);
+        }
     }
 
     const getCategories = (res, data) => {
@@ -100,11 +108,7 @@ const AddProduct = () => {
 
     return (
         <Layout>
-            {
-                showModalMessage &&
-                <ModalMessage setShowModalMessage={setShowModalMessage} message={message} />
-            }
-            {/* <h1 className='p-2 text-lg first-letter:text-2xl'>Dashboard</h1> */}
+            <AcceptDialog />
             {
                 loading && <ModalLoading />
             }

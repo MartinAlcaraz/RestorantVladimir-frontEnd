@@ -66,6 +66,12 @@
   --brown-4: #73351F;
   --green: #4CA660;
   --color-warning: #A90112;
+  --blue: #3F59F2;
+  --dark-blue: #3344A6;
+}
+
+.bg-warning{
+  background-color: #A92620;
 }
 
 h1{
@@ -121,7 +127,7 @@ input,textarea, select {
 
 .animacion-in {
   animation-name: zoom-in;
-  animation-duration: 0.6s;
+  animation-duration: 0.7s;
 }
 
 @keyframes zoom-in {
@@ -136,7 +142,7 @@ input,textarea, select {
 
 .animacion-out {
   animation-name: zoom-out;
-  animation-duration: 0.6s;
+  animation-duration: 0.7s;
 }
 
 @keyframes zoom-out {
@@ -179,15 +185,15 @@ body {
 
 
 .boton-transparente {
-  background-color: rgba(29, 78, 216, 0.45)
+  background-color: rgba(51, 68, 166, 0.65)
 }
 
 .boton-transparente:hover {
-  background-color: rgba(29, 78, 216, 0.75)
+  background-color: rgba(63, 89, 242, 0.95)
 }
 
 .boton-transparente:active {
-  background-color: rgba(83, 111, 188, 0.95)
+  background-color: rgba(43, 69, 222, 0.95)
 }
 
 .active img {
