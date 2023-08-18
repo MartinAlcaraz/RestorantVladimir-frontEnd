@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "./Card";
 
-const ModalMessage = ({ open=false, warning=false,  title, message, handleAccept }) => {
+const ModalMessage = ({ open, warning=false,  title, message, handleAccept }) => {
 
     const claseAnimacionIn = 'animacion-in';    // animacion para la entrada de la ventana
     const claseAnimacionOut = 'animacion-out';  // animacion para la salida de la ventana
@@ -15,9 +15,7 @@ const ModalMessage = ({ open=false, warning=false,  title, message, handleAccept
         }, 500);    // al desaparecer la ventana modal se elimina el componente del DOM
     }
 
-    // useEffect(()=>{
-    //     console.log("open");
-    // }, [open]);
+    console.log("open ",open);
 
     if (!open){
         return;
@@ -40,4 +38,4 @@ const ModalMessage = ({ open=false, warning=false,  title, message, handleAccept
     )
 }
 
-export default ModalMessage;
+export default React.memo(ModalMessage);

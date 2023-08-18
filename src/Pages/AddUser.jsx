@@ -16,6 +16,8 @@ function AddUser({ user }) {
 
     const navigate = useNavigate();
 
+    const [allowShowLoading, setAllowShowLoading] = useState(false);
+
     const [errorMessage, loading, sendHttpRequest] = useFetch();
 
     const [AcceptMessage, setModalMessage, accept] = useModalMessage();
@@ -23,7 +25,7 @@ function AddUser({ user }) {
     const createNewUserHandler = async (res, data) => {
 
         if (res.status == 201) {
-            setModalMessage("Exito","El usuario se ha creado!",false);
+            setModalMessage("Exito", "El usuario se ha creado!", false);
             reset();
             accept();
         } else {
@@ -47,7 +49,6 @@ function AddUser({ user }) {
             formData.append("roles[]", elem);    // el backend toma todos los campos "roles[]" y crea el array "roles" nuevamente.
         });
 
-
         sendHttpRequest('/api/users', "POST", formData, createNewUserHandler);
     }
 
@@ -66,16 +67,30 @@ function AddUser({ user }) {
         )
     }
 
+
+    useEffect(() => {
+        if (loading) {
+            setAllowShowLoading(true);
+            setTimeout(() => {
+                setAllowShowLoading(false);
+            }, 1000);
+        }
+    }, [loading]);
+
+
     return (
         <Layout>
             <Card>
                 <h1 className='text-xl text-center underline capitalize'>Agregar Usuario</h1>
-                
-                <AcceptMessage/>
 
                 {
-                    loading && <ModalLoading />
+                    !(loading || allowShowLoading) && <AcceptMessage />   /* cuando se cierra el loading se muestra el mensage */
                 }
+
+                {
+                    (loading || allowShowLoading) && <ModalLoading />    /* permite mostrar el loading al menos 1 segundo */
+                }     
+
                 <form onSubmit={handleSubmit(onSubmit)} className='p-2 pt-4'>
 
                     {/*///////////////   Nombre   ////////////////*/}

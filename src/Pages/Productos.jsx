@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Product from '../components/Product.jsx';
 import NotFound from './NotFound.jsx';
@@ -9,6 +9,14 @@ function Productos({ categoria }) {
 
     const [errorMessage, loading, sendHttpRequest] = useFetch();
     const [products, setProducts] = useState([]);
+    const [selected, setSelected] = useState("sort=name");
+
+    const options = [
+        { text: "Nombre", val: "sort=name" },
+        { text: "Menor precio", val: "sort=price" },
+        { text: "Mayor precio", val: "sort=-price" },
+    ];
+
     const navigate = useNavigate();
 
     const requestHandler = (res, data) => {
@@ -20,16 +28,22 @@ function Productos({ categoria }) {
         }
     }
 
-    const fetchData = async () => {
+    const fetchData = async (querySt) => {
+        let queryString = "";
+
+        if (querySt != undefined && querySt != "") {
+            queryString = "?" + querySt;  //  =>  ?sort=price
+        }
+
         switch (categoria) {
             case 'platos':
-                sendHttpRequest('/api/products/category/plato', "GET", null, requestHandler);
+                sendHttpRequest('/api/products/category/plato' + queryString, "GET", null, requestHandler);
                 break;
             case 'bebidas':
-                sendHttpRequest('/api/products/category/bebidas', "GET", null, requestHandler);
+                sendHttpRequest('/api/products/category/bebidas' + queryString, "GET", null, requestHandler);
                 break;
             case 'postres':
-                sendHttpRequest('/api/products/category/postres', "GET", null, requestHandler);
+                sendHttpRequest('/api/products/category/postres' + queryString, "GET", null, requestHandler);
                 break;
             default:
                 requestHandler({ status: 400 });
@@ -39,14 +53,31 @@ function Productos({ categoria }) {
 
     // 1° se piden los datos 
     useEffect(() => {
-        fetchData();
+        setSelected("sort=name");
+        fetchData(selected);
     }, [categoria]);
 
     if (errorMessage) {
         navigate('/error');
     }
+
+    const handleChange = (e) => {
+        setSelected(e.target.value);
+        fetchData(e.target.value);
+    };
+
     return (
         <div className='min-h-[90vh] p-2 pt-4 bg-secondary'>
+            <div className='text-right pb-2'>
+                <p className='inline'>Ordenar por </p>
+                <select onChange={handleChange} value={selected}>
+                    {
+                        options.map(({ text, val }, index) => {
+                            return <option value={val} className='text-sm' key={index}>{text}</option>
+                        })
+                    }
+                </select>
+            </div>
             {
                 loading ? <Loading /> :
                     (

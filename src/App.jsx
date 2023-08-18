@@ -109,7 +109,8 @@ function App() {
 
           <NavBar toggleMenu={toggleMenu} allPaths={allPaths} user={user} onLine={onLine}/>
           <div className='mt-10'>
-            {allRoutes}
+            
+            {allRoutes}  {/* rutas */}
 
             <Footer user={user} setUnloggedUser={setUnloggedUser}/>
           </div>

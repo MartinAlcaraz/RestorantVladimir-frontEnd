@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import Card from "./Card";
 
 const ModalDelete = ({ open, title, message, handleConfirm, handleCancel }) => {

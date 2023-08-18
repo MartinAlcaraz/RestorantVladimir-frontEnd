@@ -16,7 +16,7 @@ function RemoveUser({ user }) {
 
     const [AcceptDialog, setModalMessage, accept] = useModalMessage();
 
-    const [ConfirmationDialog, confirmDelete] = useConfirmDelete('Eliminar usuario' ,'Esta seguro que desea eliminar el usuario?'); // return a Component and a function
+    const [ConfirmDeleteDialog, confirmDelete] = useConfirmDelete('Eliminar usuario' ,'Esta seguro que desea eliminar el usuario?'); // return a Component and a function
 
     const navigate = useNavigate();
     const { register, handleSubmit, reset, setError, trigger, getValues, formState: { errors, isValid } } = useForm({
@@ -52,13 +52,16 @@ function RemoveUser({ user }) {
 
         if (res.status == 200) {
             setModalMessage("Exito","El usuario ha sido eliminado", false);
-            requestUsers();
-            setEmail('');
-            reset();
-            await accept();
+            let accepted = await accept();
+            if (accepted || !accepted){
+                requestUsers();
+                setEmail('');
+                reset();
+            }
+
         }else{
             setModalMessage("Error","No fue posible eliminar el usuario", true);
-            await accept();
+            accept();
         }
     }
 
@@ -96,8 +99,8 @@ function RemoveUser({ user }) {
             <Card>
                 <h3 className='p-4 text-center underline text-lg font-medium'>Eliminar Usuario</h3>
                 
-                {/* ConfirmationDialog se muestra y oculta cuando se espera a confirmDelete() */}
-                <ConfirmationDialog />
+                {/* ConfirmDeleteDialog se muestra y oculta cuando se espera a confirmDelete() */}
+                <ConfirmDeleteDialog />
                 
                 <AcceptDialog/>
 
