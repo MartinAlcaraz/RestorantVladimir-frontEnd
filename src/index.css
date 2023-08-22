@@ -55,6 +55,7 @@
   .lupa{
     @apply w-6 h-6 active:text-[#F2E49B];
   }
+
 }
 
 /* #F2E49B #BF9D5E #A6763C #8C543F #73351F */
@@ -74,6 +75,10 @@
   background-color: #A92620;
 }
 
+.text-error{
+  color: #A90112;
+}
+
 h1{
   font-family: 'Belanosima', sans-serif;
 }
@@ -87,10 +92,19 @@ input,textarea, select {
   border-radius: 4px;
 }
 
-.text-error{
-  color: #A90112;
-  /* text-shadow: 1px 1px ; */
+.select{
+  background-color: var(--brown-3);
+  color: var(--yellow);
+  font-size: 14px;
+  padding: 4px 4px;
 }
+.option{
+  background-color: var(--brown-3);
+  color: var(--yellow);
+  font-size: 14px;
+}
+
+
 
 /* #F2E49B #BF9D5E #A6763C #73351F #8C543F */
 

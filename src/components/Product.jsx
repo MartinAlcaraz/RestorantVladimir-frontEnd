@@ -1,13 +1,14 @@
 
 import React from 'react'
 import { PriceFormatter } from '../Utils/PriceFormatter';
+import Card from './Card';
 
 function Product({ _id, name, price, description, category, imgURL }) {
     
     const formattedPrice = PriceFormatter(price);    
     
     return (
-        <div _id={_id} category={category} className='mb-2 p-2 bg-card rounded-md shadow-md shadow-black'>
+        <Card _id={_id} category={category} >
             <div>
                 <h1 className='inline capitalize font-semibold'>{name}</h1>
                 <p className='float-right price'>$ {formattedPrice}</p>
@@ -16,7 +17,7 @@ function Product({ _id, name, price, description, category, imgURL }) {
                 <img className='shadow-md shadow-black mx-auto object-contain h-full' src={imgURL} />
             </div>
             <p className='capitalize text-gray-700'>{description}</p>
-        </div>
+        </Card>
     )
 }
 

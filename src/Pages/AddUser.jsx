@@ -122,7 +122,7 @@ function AddUser({ user }) {
                     <input type="password" name="password" className='input'
                         {...register("password", {
                             required: "El password es requerido.",
-                            minLength: { value: 3, message: "El password muy corto." },
+                            minLength: { value: 4, message: "El password muy corto." },
                             maxLength: { value: 10, message: "El password no puede tener mas de 10 caracteres." }
                         })} />
                     {errors.password ? <p className='text-error h-6'>{errors.password.message}</p> : <p className='h-6'></p>}

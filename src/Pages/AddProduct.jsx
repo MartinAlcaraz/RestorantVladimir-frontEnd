@@ -62,8 +62,10 @@ const AddProduct = () => {
         if (res.status == 201) {
             setModalMessage("Exito", "El producto se ha creado!", false);
             setSelectedImg(iconImage);
-            reset();
-            await accept();
+            let accepted = await accept();
+            if (accepted || !accepted){
+                reset();
+            }
         } else {
             if (res.status == 409) {
                 setError("nombre", { message: "El nombre del producto ya existe." });

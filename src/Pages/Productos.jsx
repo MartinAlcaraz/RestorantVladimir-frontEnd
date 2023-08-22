@@ -14,7 +14,7 @@ function Productos({ categoria }) {
     const options = [
         { text: "Nombre", val: "sort=name" },
         { text: "Menor precio", val: "sort=price" },
-        { text: "Mayor precio", val: "sort=-price" },
+        { text: "Mayor precio", val: "sort=-price" }
     ];
 
     const navigate = useNavigate();
@@ -35,20 +35,8 @@ function Productos({ categoria }) {
             queryString = "?" + querySt;  //  =>  ?sort=price
         }
 
-        switch (categoria) {
-            case 'platos':
-                sendHttpRequest('/api/products/category/plato' + queryString, "GET", null, requestHandler);
-                break;
-            case 'bebidas':
-                sendHttpRequest('/api/products/category/bebidas' + queryString, "GET", null, requestHandler);
-                break;
-            case 'postres':
-                sendHttpRequest('/api/products/category/postres' + queryString, "GET", null, requestHandler);
-                break;
-            default:
-                requestHandler({ status: 400 });
-                break;
-        }
+        // ejemplo:  /api/products/category/platos
+        sendHttpRequest(`/api/products/category/${categoria}` + queryString, "GET", null, requestHandler);
     }
 
     // 1° se piden los datos 
@@ -70,10 +58,10 @@ function Productos({ categoria }) {
         <div className='min-h-[90vh] p-2 pt-4 bg-secondary'>
             <div className='text-right pb-2'>
                 <p className='inline'>Ordenar por </p>
-                <select onChange={handleChange} value={selected}>
+                <select onChange={handleChange} value={selected} className='select'>
                     {
                         options.map(({ text, val }, index) => {
-                            return <option value={val} className='text-sm' key={index}>{text}</option>
+                            return <option value={val} className='option' key={index}>{text}</option>
                         })
                     }
                 </select>

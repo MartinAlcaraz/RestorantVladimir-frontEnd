@@ -7,7 +7,7 @@ import ErrorPage from './ErrorPage.jsx';
 import Layuot from '../components/Layout.jsx';
 
 const Search = () => {
-    console.log("Search");
+
     const [errorMessage, loading, sendHttpRequest] = useFetch();
     const { state } = useLocation();
     const { searchProduct } = state;     // contiene el texto ingresado en el input de busqueda del navbar
@@ -26,9 +26,9 @@ const Search = () => {
             }
         }
     }
+
     // 1° se consultan los productos
     useEffect(() => {
-        console.log("search ", searchProduct);
         sendHttpRequest(`/api/products/search?name=${searchProduct}`, 'GET', null, queryHandler);
     }, [searchProduct]);
 
