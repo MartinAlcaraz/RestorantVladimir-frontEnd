@@ -6,7 +6,7 @@ import LensIcon from "../icons/LensIcon.jsx";
 import CloseIcon from "../icons/CloseIcon.jsx";
 import SettingIcon from "../icons/SettingIcon.jsx";
 
-const NavBar = ({ toggleMenu, allPaths, user, onLine }) => {
+const NavBar = ({ toggleMenu, hideMenu, allPaths, user, onLine }) => {
     const [title, setTitle] = useState('');
     const [showSearch, setShowSearch] = useState(false);
     const [showForm, setShowForm] = useState(false);
@@ -71,8 +71,8 @@ const NavBar = ({ toggleMenu, allPaths, user, onLine }) => {
     }, [showForm]);
 
     return (
-        <div className={(onLine ? "top-0" : "top-10") + " z-10 bg-primary fixed w-full flex items-center h-10"}>
-            <button onClick={toggleMenu} className="z-20 basis-1/12 min-w-[30px]">
+        <div onClick={hideMenu} className={(onLine ? "top-0" : "top-10") + " z-10 bg-primary fixed w-full flex items-center h-10"}>
+            <button onClick={(e)=> {e.stopPropagation(); toggleMenu() }} className="z-20 basis-1/12 min-w-[30px]">
                 <img src={menuIcon} className="p-1 text-gray-50" />
             </button>
 

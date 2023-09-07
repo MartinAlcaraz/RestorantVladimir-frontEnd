@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import ModalLoading from '../components/ModalLoading.jsx';
 import useFetch from '../Utils/useFetch.js';
-import ModalMessage from '../components/ModalMessage.jsx';
 import Card from '../components/Card.jsx';
 import Layout from '../components/Layout.jsx';
-import useModalMessage from '../Utils/useModalMessage.jsx';
+import useModalDialog from '../Utils/useModalDialog.jsx';
 
 function AddUser({ user }) {
 
@@ -20,14 +19,14 @@ function AddUser({ user }) {
 
     const [errorMessage, loading, sendHttpRequest] = useFetch();
 
-    const [AcceptMessage, setModalMessage, accept] = useModalMessage();
+    const [AcceptDialog, setModalDialog, acceptDialog] = useModalDialog();
 
     const createNewUserHandler = async (res, data) => {
 
         if (res.status == 201) {
-            setModalMessage("Exito", "El usuario se ha creado!", false);
+            setModalDialog("Exito", "El usuario se ha creado!", false);
             reset();
-            accept();
+            acceptDialog();
         } else {
             if (res.status == 409) {
                 setError("email", { message: "El email ya existe, usa otro." });
@@ -84,7 +83,7 @@ function AddUser({ user }) {
                 <h1 className='text-xl text-center underline capitalize'>Agregar Usuario</h1>
 
                 {
-                    !(loading || allowShowLoading) && <AcceptMessage />   /* cuando se cierra el loading se muestra el mensage */
+                    !(loading || allowShowLoading) && <AcceptDialog />   /* cuando se cierra el loading se muestra el mensage */
                 }
 
                 {

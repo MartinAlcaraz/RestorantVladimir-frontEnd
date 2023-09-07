@@ -1,4 +1,4 @@
-import { useState , useEffect} from "react";
+import { useState } from "react";
 import Card from "./Card";
 
 const ModalDelete = ({ open, title, message, handleConfirm, handleCancel }) => {
@@ -21,10 +21,6 @@ const ModalDelete = ({ open, title, message, handleConfirm, handleCancel }) => {
             handleCancel();
         }, 500);    // al desaparecer la ventana modal se elimina el componente del DOM
 
-    }
-
-    if (!open) {
-        return;
     }
 
     return (

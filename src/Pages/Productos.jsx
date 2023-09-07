@@ -5,7 +5,7 @@ import NotFound from './NotFound.jsx';
 import Loading from '../components/Loading.jsx';
 import useFetch from '../Utils/useFetch.js';
 
-function Productos({ categoria }) {
+function Productos({ categoria, user }) {
 
     const [errorMessage, loading, sendHttpRequest] = useFetch();
     const [products, setProducts] = useState([]);
@@ -39,6 +39,10 @@ function Productos({ categoria }) {
         sendHttpRequest(`/api/products/category/${categoria}` + queryString, "GET", null, requestHandler);
     }
 
+    function refreshData(){
+        fetchData(selected);
+    }
+
     // 1° se piden los datos 
     useEffect(() => {
         setSelected("sort=name");
@@ -55,7 +59,7 @@ function Productos({ categoria }) {
     };
 
     return (
-        <div className='min-h-[90vh] p-2 pt-4 bg-secondary'>
+        <div className='min-h-[90vh] p-2 pt-4 bg-secondary' id="productos">
             <div className='text-right pb-2'>
                 <p className='inline'>Ordenar por </p>
                 <select onChange={handleChange} value={selected} className='select'>
@@ -75,7 +79,7 @@ function Productos({ categoria }) {
                                 products.map((p, index) => {
                                     let img = new Image();
                                     img.src = p.imgURL;
-                                    return img.onload = <Product key={index} imgURL={p.imgURL} _id={p._id} name={p.name} price={p.price} description={p.description} category={p.category} />
+                                    return img.onload = <Product key={index} imgURL={p.imgURL} _id={p._id} name={p.name} price={p.price} description={p.description} category={p.category} edit={user.isAdmin} refreshData={refreshData}/>
                                 })
                     )
             }
@@ -83,4 +87,4 @@ function Productos({ categoria }) {
     )
 }
 
-export default React.memo(Productos);
+export default Productos;

@@ -1,11 +1,11 @@
 
-const Loading = ({ small= false }) => {
+const Loading = ({ small = false }) => {
     // let loaderClass="spinner mx-auto mt-[55%]";
     let loaderClass = "loader";
-    if (small){
+    if (small) {
         loaderClass += " loader-sm";
-    } 
-    return(
+    }
+    return (
         <div className={loaderClass} ></div>
     )
 }

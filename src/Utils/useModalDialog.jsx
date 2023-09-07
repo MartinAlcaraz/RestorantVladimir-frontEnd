@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ModalMessage from '../components/ModalMessage';
 
 // utiliza el componente ModalMessage
-const useModalMessage = () => {
+const useModalDialog = () => {
 
     const [title, setTitle] = useState("Titulo");
     const [message, setMessage] = useState("Mensaje");
@@ -10,7 +10,7 @@ const useModalMessage = () => {
 
     const [promise, setPromise] = useState(null); // promise == null
 
-    const accept = () => new Promise((resolve, reject) => {
+    const acceptDialog = () => new Promise((resolve, reject) => {
         setPromise({ resolve });  // promise == Promise .La variable de estado promise se setea como Promise y permite ver el componente <Dialog/>
     });
 
@@ -23,19 +23,19 @@ const useModalMessage = () => {
         handleClose();
     };
 
-    const setModalMessage= (title, message, warning) => {
+    const setModalDialog= (title, message, warning) => {
         setTitle(title);
         setMessage(message);
         setWarning(warning);
     }
 
-    const AcceptMessage = () => (
+    const AcceptDialog = () => (
         <ModalMessage open={promise !== null} warning={warning}
             title={title} message={message}
             handleAccept={handleAccept}
         />
     );
-    return [AcceptMessage, setModalMessage, accept];
+    return [AcceptDialog, setModalDialog, acceptDialog];
 };
 
-export default useModalMessage;
+export default useModalDialog;

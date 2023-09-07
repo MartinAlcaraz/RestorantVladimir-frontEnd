@@ -54,22 +54,23 @@ function App() {
     <Routes>
       <Route path='/' element={<Main user={user} setUnloggedUser={setUnloggedUser}/>} />
 
-      <Route path='/platos' element={<Productos categoria='platos' />} />
-      <Route path='/bebidas' element={<Productos categoria='bebidas' />} />
+      <Route path='/platos' element={<Productos categoria='platos' user={user}/>} />
+      <Route path='/bebidas' element={<Productos categoria='bebidas' user={user}/>} />
 
-      <Route path='/postres' element={<Productos categoria='postres' />} />
+      <Route path='/postres' element={<Productos categoria='postres' user={user}/>} />
 
       <Route path='/search' element={<Search />} />
 
       <Route path='/login' element={<Login />} />
 
-      <Route path="/error" element={<ErrorPage />}></Route>
+      <Route path="/error" element={<ErrorPage />}/>
 
       <Route path='/*' element={<NotFound />} />
 
       <Route element={<ProtectedRoutes user={user} />}>
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/addProduct' element={<AddProduct />} />
+        {/* <Route path='/editProduct' element={<EditProduct editmode={true}/>} /> */}
         <Route path='/addUser' element={<AddUser user={user} />} />
         <Route path='/removeUser' element={<RemoveUser user={user} />} />
 
@@ -107,7 +108,7 @@ function App() {
             }
           </div>
 
-          <NavBar toggleMenu={toggleMenu} allPaths={allPaths} user={user} onLine={onLine}/>
+          <NavBar toggleMenu={toggleMenu} hideMenu={hideMenu} allPaths={allPaths} user={user} onLine={onLine}/>
           <div className='mt-10'>
             
             {allRoutes}  {/* rutas */}

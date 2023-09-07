@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import useFetch from '../Utils/useFetch';
 import { useNavigate } from 'react-router-dom';
-import ModalLoading from '../components/ModalLoading';
 import { useForm } from 'react-hook-form';
 import Layout from '../components/Layout';
 import Card from '../components/Card';
 import useConfirmDelete from '../Utils/useConfirmDelete';
-import useModalMessage from '../Utils/useModalMessage';
+import useModalDialog from '../Utils/useModalDialog';
 
 function RemoveUser({ user }) {
 
@@ -14,7 +13,7 @@ function RemoveUser({ user }) {
     const [users, setUsers] = useState([]);
     const [email, setEmail] = useState("");
 
-    const [AcceptDialog, setModalMessage, accept] = useModalMessage();
+    const [AcceptDialog, setModalDialog, acceptDialog] = useModalDialog();
 
     const [ConfirmDeleteDialog, confirmDelete] = useConfirmDelete('Eliminar usuario' ,'Esta seguro que desea eliminar el usuario?'); // return a Component and a function
 
@@ -51,8 +50,8 @@ function RemoveUser({ user }) {
     const deleteUser = async (res, data) => {
 
         if (res.status == 200) {
-            setModalMessage("Exito","El usuario ha sido eliminado", false);
-            let accepted = await accept();
+            setModalDialog("Exito","El usuario ha sido eliminado", false);
+            let accepted = await acceptDialog();
             if (accepted || !accepted){
                 requestUsers();
                 setEmail('');
@@ -60,8 +59,8 @@ function RemoveUser({ user }) {
             }
 
         }else{
-            setModalMessage("Error","No fue posible eliminar el usuario", true);
-            accept();
+            setModalDialog("Error","No fue posible eliminar el usuario", true);
+            acceptDialog();
         }
     }
 

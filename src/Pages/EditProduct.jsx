@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import ModalLoading from '../components/ModalLoading.jsx';
@@ -7,11 +7,11 @@ import Loading from '../components/Loading.jsx';
 import Card from '../components/Card.jsx';
 import errorImg from '../icons/errorImg.svg';
 import iconImage from '../icons/imageIcon.svg';
-import Layout from '../components/Layout.jsx';
+import Modal from '../components/Modal.jsx';
 import useModalDialog from '../Utils/useModalDialog.jsx';
 
-const AddProduct = () => {
-    const { register, handleSubmit, reset, setError, trigger, formState: { errors, isValid } } = useForm({
+const EditProduct = ({ closeEdit, openEdit, _id, name, price, description, category, imgURL, refreshData }) => {
+    const { register, handleSubmit, reset, setError, trigger, setValue, formState: { errors, isValid } } = useForm({
         mode: "onChange"    // necesario para la propiedad isValid, para que compruebe si es valido el formulario en cada entrada al input
     });
 
@@ -19,14 +19,12 @@ const AddProduct = () => {
 
     const [errorMessage, loading, sendHttpRequest] = useFetch();
     const [categories, setCategories] = useState([]);
-    const [formSubmitted, setFormSubmitted] = useState(false);
-    
-    const formRef = useRef();
+    const [formSubmitted, setFormSubmitted] = useState(false); // para evitar que el formulario se envíe mas de una vez
 
     const [AcceptDialog, setModalDialog, acceptDialog] = useModalDialog();
 
     const [loadingImg, setLoadingImg] = useState(false);
-    const [selectedImg, setSelectedImg] = useState(iconImage);  // foto subida por el usuario
+    const [selectedImg, setSelectedImg] = useState(imgURL);  // foto actual del producto
 
     // Image function
     async function cargarImagen(file) {
@@ -57,16 +55,16 @@ const AddProduct = () => {
         inputFile.click();
     }
 
-    const createProductHandler = async (res, data) => {
+    const editProductHandler = async (res, data) => {
 
-        if (res.status == 201) {
-            setModalDialog("Exito", "El producto se ha creado!", false);
+        if (res.status == 200) {
+            setModalDialog("Exito", "El producto se ha modificado!", false);
             setSelectedImg(iconImage);
             let accepted = await acceptDialog();
             if (accepted || !accepted) {
                 reset();
             }
-
+            refreshData();
         } else {
             if (res.status == 409) {
                 setError("nombre", { message: "El nombre del producto ya existe." });
@@ -75,16 +73,10 @@ const AddProduct = () => {
             }
         }
         setFormSubmitted(false);
-        
-        // se habilitan los inputs del formulario nuevamente.
-        console.log(formRef.current);
-        let elements = formRef.current.elements;
-        for (let i = 0; i < elements.length; i++) {
-            elements[i].disabled = false;
-        }
     }
 
     const onSubmit = async (data, e) => {
+
         if (formSubmitted == false) {
             setFormSubmitted(true);
 
@@ -93,9 +85,12 @@ const AddProduct = () => {
             formData.append('name', data.nombre);
             formData.append('price', data.precio * 1);
             formData.append('description', data.descripcion);
-            formData.append('image', data.inputFile[0]);
 
-            sendHttpRequest('/api/products', "POST", formData, createProductHandler);
+            if (selectedImg !== imgURL) { // si no se elige una imagen de deja la anteriormente seleccionada.
+                formData.append('image', data.inputFile[0]);
+            }
+
+            sendHttpRequest('/api/products/' + _id, "PUT", formData, editProductHandler);
 
             // se deshabilitan los inputs del formulario
             let elements = e.target.elements;
@@ -105,32 +100,43 @@ const AddProduct = () => {
         }
     }
 
+    // rellena los valores del formulario
+    function setValues() {
+        setValue("nombre", name);
+        setValue("precio", price);
+        setValue("descripcion", description);
+        setValue("categoria", category._id);
+        setValue("inputFile", null);        // null para la validacion si no se elije ningun archivo de imagen.
+    }
+
     const getCategories = (res, data) => {
         if (res.status == 200) {
             setCategories(data.data);
+            setValues();        // setea los valores del formulario luego de obtener las categorias.
         } else {
-            navigate('/error')
+            navigate('/error');
         }
     }
 
-    // obtiene las categorias de los productos
+    // obtiene las categorias de todos los productos
     useEffect(() => {
         sendHttpRequest('/api/categories', "GET", null, getCategories);
     }, []);
 
-    if (errorMessage) {
-        navigate('/error');
-    }
+    if (errorMessage) { navigate('/error'); }
+
+    if (!openEdit) { return; }
 
     return (
-        <Layout>
+        <Modal isOpen={openEdit} close={closeEdit}>
             <AcceptDialog />
             {
-                loading && <ModalLoading />
+                loading && formSubmitted && <ModalLoading /> // loading fetch
             }
-            <Card>
-                <h3 className='text-center underline text-lg font-medium'>Agregar producto</h3>
-                <form onSubmit={handleSubmit(onSubmit)} className='p-2 pt-4' ref={formRef}>
+            <Card >
+
+                <h3 className='text-center underline text-lg font-medium'>Editar producto</h3>
+                <form onSubmit={handleSubmit(onSubmit)} className='p-2 pt-4' >
 
                     {/*///////////////   Nombre   ////////////////*/}
                     <label htmlFor="nombre">Nombre: &nbsp;</label>
@@ -167,11 +173,15 @@ const AddProduct = () => {
                     <div className='m-auto'>
                         <input type="file" className='hidden' name="inputFile" id="inputFile" accept="image/jpeg, image/png"
                             {...register('inputFile', {
-                                required: "Seleccione una imagen.",
+
+                                // required: "Seleccione una imagen.",
                                 validate: {
-                                    size: (value) => (value[0].size / 1024 < 6144) || "La imagen debe pesar menos de 6MB",
-                                    tipo: (value) => (["image/jpg", "image/jpeg", "image/png"].includes(value[0].type)) || "Elija otra imagen (.jpg, .jpeg ó .png)"
+                                    // si value == null es porque no se selecciono una imagen, por lo tanto se utiliza la imagen anteriormente guardada.
+                                    // si value != null se valida el archivo seleccionado.
+                                    size: (value) => value == null ? true : ((value[0].size / 1024 < 6144) || "La imagen debe pesar menos de 6MB"),
+                                    tipo: (value) => value == null ? true : ((["image/jpg", "image/jpeg", "image/png"].includes(value[0].type)) || "Elija otra imagen (.jpg, .jpeg ó .png)")
                                 },
+
                                 onChange: (value) => cargarImagen(value.target.files[0])
                             })} />
                         {errors.inputFile ? <p className='text-error text-center h-6'>{errors.inputFile.message}</p> : <p className='h-6'></p>}
@@ -188,8 +198,8 @@ const AddProduct = () => {
                                 minLength: { value: 3, message: "Descripcion muy corta." },
                                 maxLength: { value: 500, message: "La descripcion no puede tener mas de 500 caracteres." }
                             })} />
+                        {errors.descripcion ? <p className='text-error h-6'>{errors.descripcion.message}</p> : <p className='h-6'></p>}
                     </div>
-                    {errors.descripcion ? <p className='text-error h-6'>{errors.descripcion.message}</p> : <p className='h-6'></p>}
                     <br />
 
                     {/*//////////   Precio   ////////////*/}
@@ -203,11 +213,11 @@ const AddProduct = () => {
                     {errors.precio ? <p className='text-error h-6'>{errors.precio.message}</p> : <p className='h-6'></p>}
                     <br />
 
-                    <input type="submit" className='boton py-1 px-2' value="Agregar Producto" />
+                    <input type="submit" className='boton py-1 px-2' value="Editar Producto" />
                 </form>
             </Card>
-        </Layout>
+        </Modal>
     )
 }
 
-export default AddProduct;
+export default EditProduct;
