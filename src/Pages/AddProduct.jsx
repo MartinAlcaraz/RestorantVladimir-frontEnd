@@ -134,7 +134,7 @@ const AddProduct = () => {
 
                     {/*///////////////   Nombre   ////////////////*/}
                     <label htmlFor="nombre">Nombre: &nbsp;</label>
-                    <input name="nombre" className='input'
+                    <input name="nombre" id="nombre" className='input' 
                         {...register("nombre", {
                             required: "El nombre es requerido.",
                             pattern: { value: /^[a-zA-Z'-.,\s\d]+$/, message: "El nombre no puede contener caracteres especiales." },
@@ -145,7 +145,7 @@ const AddProduct = () => {
 
                     {/*///////////   Categoria   /////////*/}
                     <label htmlFor="categoria">Categoria &nbsp;</label>
-                    <select name="categoria" className='m-0 p-1'
+                    <select name="categoria" id="categoria" className='m-0 p-1'
                         {...register("categoria", { required: "Seleccione una categoria" })} >
                         <option value="" className=''>...</option>
                         {
@@ -181,7 +181,7 @@ const AddProduct = () => {
                     {/*////////   Descripcion   ///////////*/}
                     <div className='flex'>
                         <label htmlFor="descripcion">Descripcion: &nbsp;</label>
-                        <textarea name="descripcion" className='w-3/4 h-12 resize-none'
+                        <textarea name="descripcion" id="descripcion" className='w-3/4 h-12 resize-none'
                             {...register("descripcion", {
                                 required: "La descripcion es requerida.",
                                 pattern: { value: /^[a-zA-Z!'.,"&%$()#-\s\d]+$/, message: "La descripcion no puede contener caracteres especiales." },
@@ -194,7 +194,7 @@ const AddProduct = () => {
 
                     {/*//////////   Precio   ////////////*/}
                     <label htmlFor="precio">Precio: $ </label>
-                    <input type="number" step="0.01" name="precio" className='input' placeholder="0.00"
+                    <input type="number" step="0.01" name="precio" id="precio" className='input' placeholder="0.00"
                         {...register("precio", {
                             required: "El precio es requerido.",
                             min: { value: 0, message: "El precio no puede ser menor a $0" },

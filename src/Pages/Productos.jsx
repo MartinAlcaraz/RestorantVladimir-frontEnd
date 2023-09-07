@@ -62,7 +62,7 @@ function Productos({ categoria, user }) {
         <div className='min-h-[90vh] p-2 pt-4 bg-secondary' id="productos">
             <div className='text-right pb-2'>
                 <p className='inline'>Ordenar por </p>
-                <select onChange={handleChange} value={selected} className='select'>
+                <select name="orderSelect" onChange={handleChange} value={selected} className='select'>
                     {
                         options.map(({ text, val }, index) => {
                             return <option value={val} className='option' key={index}>{text}</option>
