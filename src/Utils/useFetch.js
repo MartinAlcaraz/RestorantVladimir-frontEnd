@@ -12,7 +12,7 @@ function useFetch() {
                 credentials: 'include',
                 // mode: 'cors',
                 method: method,
-                body: body? body : null 
+                body: body? body : null, 
                 // headers: {
                 //     'Content-Type': 'application/json'
                 // },

@@ -2,7 +2,8 @@ import { useState } from 'react';
 import ModalDelete from '../components/ModalDelete';
 
 // utiliza el componente ModalDelete
-const useConfirmDelete = (title, message) => {
+// message y keyword forman parte de la pregunta => Esta seguro que quiere eliminar a KEYWORD ?
+const useConfirmDelete = (title, message, keyword) => {
 
     const [promise, setPromise] = useState(null); // promise == null
 
@@ -26,7 +27,7 @@ const useConfirmDelete = (title, message) => {
 
     const ConfirmationDialog = () => (
         <ModalDelete open = {promise !== null}
-            title = {title} message = {message}
+            title = {title} message = {message} keyword={keyword}
             handleConfirm = {handleConfirm} handleCancel = {handleCancel}
         />
     );

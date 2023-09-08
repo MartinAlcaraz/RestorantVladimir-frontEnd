@@ -11,12 +11,14 @@ function RemoveUser({ user }) {
 
     const [errorMessage, loading, sendHttpRequest] = useFetch();
     const [users, setUsers] = useState([]);
+    const [usuario, setUsuario] = useState("null");
+
     const [email, setEmail] = useState("");
 
     const [AcceptDialog, setModalDialog, acceptDialog] = useModalDialog();
 
-    const [ConfirmDeleteDialog, confirmDelete] = useConfirmDelete('Eliminar usuario' ,'Esta seguro que desea eliminar el usuario?'); // return a Component and a function
-
+    const [ConfirmDeleteDialog, confirmDelete] = useConfirmDelete("Eliminar usuario", "Esta seguro que desea eliminar el usuario", usuario); // return a Component and a function
+    
     const navigate = useNavigate();
     const { register, handleSubmit, reset, setError, trigger, getValues, formState: { errors, isValid } } = useForm({
         mode: "onChange"    // necesario para la propiedad isValid, para que compruebe si es valido el formulario en cada entrada al input
@@ -69,6 +71,9 @@ function RemoveUser({ user }) {
     // data.nombre.split(",")[2];  // nombre del usuario a eliminar
 
     const onSubmit = async (data) => {
+        const usuario = data.nombre.split(",")[2];
+        setUsuario(usuario);
+        // setConfirmDelete("Eliminar usuario", "Esta seguro que desea eliminar el usuario "+usuario+"?");
         const confirm = await confirmDelete();  // promesa del hook useConfirm();
 
         let formData = new FormData();

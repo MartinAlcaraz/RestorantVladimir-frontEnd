@@ -13,7 +13,7 @@ function DeleteProduct({ isOpen, closeDelete, name, _id, refreshData }) {
     const [AcceptDialog, setModalDialog, acceptDialog] = useModalDialog();
     const [showAnswer, setShowAnswer] = useState(true);
 
-    const [ConfirmDeleteDialog, confirmDelete] = useConfirmDelete('Eliminar producto', 'Esta seguro que desea eliminar el producto?'); // return a Component and a function
+    const [ConfirmDeleteDialog, confirmDelete] = useConfirmDelete('Eliminar producto', 'Esta seguro que desea eliminar el producto', name); // return a Component and a function
 
     const handleDelete = async (res, data) => {
         if (res.status == 200) {

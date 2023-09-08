@@ -112,7 +112,6 @@ const EditProduct = ({ closeEdit, openEdit, _id, name, price, description, categ
     const getCategories = (res, data) => {
         if (res.status == 200) {
             setCategories(data.data);
-            setValues();        // setea los valores del formulario luego de obtener las categorias.
         } else {
             navigate('/error');
         }
@@ -122,6 +121,10 @@ const EditProduct = ({ closeEdit, openEdit, _id, name, price, description, categ
     useEffect(() => {
         sendHttpRequest('/api/categories', "GET", null, getCategories);
     }, []);
+
+    useEffect(() => {
+        setValues();        // setea los valores del formulario luego de obtener las categorias.
+    }, [categories]);
 
     if (errorMessage) { navigate('/error'); }
 

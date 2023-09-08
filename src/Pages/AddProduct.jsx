@@ -20,7 +20,7 @@ const AddProduct = () => {
     const [errorMessage, loading, sendHttpRequest] = useFetch();
     const [categories, setCategories] = useState([]);
     const [formSubmitted, setFormSubmitted] = useState(false);
-    
+
     const formRef = useRef();
 
     const [AcceptDialog, setModalDialog, acceptDialog] = useModalDialog();
@@ -71,13 +71,14 @@ const AddProduct = () => {
             if (res.status == 409) {
                 setError("nombre", { message: "El nombre del producto ya existe." });
             } else {
+                console.log(res.status);
+                console.log(data);
                 navigate('/error');
             }
         }
         setFormSubmitted(false);
-        
+
         // se habilitan los inputs del formulario nuevamente.
-        console.log(formRef.current);
         let elements = formRef.current.elements;
         for (let i = 0; i < elements.length; i++) {
             elements[i].disabled = false;
@@ -119,6 +120,7 @@ const AddProduct = () => {
     }, []);
 
     if (errorMessage) {
+        // console.log('error \n', errorMessage);
         navigate('/error');
     }
 
@@ -134,7 +136,7 @@ const AddProduct = () => {
 
                     {/*///////////////   Nombre   ////////////////*/}
                     <label htmlFor="nombre">Nombre: &nbsp;</label>
-                    <input name="nombre" id="nombre" className='input' 
+                    <input name="nombre" id="nombre" className='input'
                         {...register("nombre", {
                             required: "El nombre es requerido.",
                             pattern: { value: /^[a-zA-Z'-.,\s\d]+$/, message: "El nombre no puede contener caracteres especiales." },
