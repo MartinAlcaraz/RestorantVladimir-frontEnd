@@ -79,7 +79,7 @@ function Productos({ categoria, user }) {
                                 products.map((p, index) => {
                                     let img = new Image();
                                     img.src = p.imgURL;
-                                    return img.onload = <Product key={index} imgURL={p.imgURL} _id={p._id} name={p.name} price={p.price} description={p.description} category={p.category} edit={user.isAdmin} refreshData={refreshData}/>
+                                    return img.onload = <Product key={index} imgURL={p.imgURL} _id={p._id} name={p.name} price={p.price} description={p.description} category={p.category} edit={user.isLogged} refreshData={refreshData}/>
                                 })
                     )
             }
