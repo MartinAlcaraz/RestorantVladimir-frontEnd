@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 function ModalMenu({ hideMenu, onLine }) {
   return (
-    <div onClick={hideMenu} className={(onLine?"top-0":"top-10")+' absolute h-full w-screen z-10 bg-gray-900/70 text-white sm:w-[540px]'}>
+    <div onClick={hideMenu} className={(onLine?"top-10":"top-20")+' fixed h-full w-screen z-10 bg-gray-900/70 text-white sm:w-[540px]'}>
       <ul className=" list-none">
         <li>
           <NavLink to='/' onClick={hideMenu} className="link-menu">Home</NavLink>
