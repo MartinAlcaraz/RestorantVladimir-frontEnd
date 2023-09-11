@@ -6,6 +6,7 @@ import Layout from '../components/Layout';
 import Card from '../components/Card';
 import useConfirmDelete from '../Utils/useConfirmDelete';
 import useModalDialog from '../Utils/useModalDialog';
+import ModalLoading from '../components/ModalLoading';
 
 function RemoveUser({ user }) {
 
@@ -18,7 +19,7 @@ function RemoveUser({ user }) {
     const [AcceptDialog, setModalDialog, acceptDialog] = useModalDialog();
 
     const [ConfirmDeleteDialog, confirmDelete] = useConfirmDelete("Eliminar usuario", "Esta seguro que desea eliminar el usuario", usuario); // return a Component and a function
-    
+
     const navigate = useNavigate();
     const { register, handleSubmit, reset, setError, trigger, getValues, formState: { errors, isValid } } = useForm({
         mode: "onChange"    // necesario para la propiedad isValid, para que compruebe si es valido el formulario en cada entrada al input
@@ -34,7 +35,7 @@ function RemoveUser({ user }) {
 
     useEffect(() => {
         // solo se solicita la lista de usuarios si el usuario es Admin.
-        if (user.isAdmin){
+        if (user.isAdmin) {
             requestUsers();
         }
     }, []);
@@ -52,16 +53,16 @@ function RemoveUser({ user }) {
     const deleteUser = async (res, data) => {
 
         if (res.status == 200) {
-            setModalDialog("Exito","El usuario ha sido eliminado", false);
+            setModalDialog("Exito", "El usuario ha sido eliminado", false);
             let accepted = await acceptDialog();
-            if (accepted || !accepted){
+            if (accepted || !accepted) {
                 requestUsers();
                 setEmail('');
                 reset();
             }
 
-        }else{
-            setModalDialog("Error","No fue posible eliminar el usuario", true);
+        } else {
+            setModalDialog("Error", "No fue posible eliminar el usuario", true);
             acceptDialog();
         }
     }
@@ -81,7 +82,7 @@ function RemoveUser({ user }) {
 
         if (confirm) {
             sendHttpRequest("/api/users", "DELETE", formData, deleteUser);
-        } 
+        }
     }
 
     // Error
@@ -99,38 +100,43 @@ function RemoveUser({ user }) {
     }
 
     return (
-        <Layout>
-            <Card>
-                <h3 className='p-4 text-center underline text-lg font-medium'>Eliminar Usuario</h3>
-                
-                {/* ConfirmDeleteDialog se muestra y oculta cuando se espera a confirmDelete() */}
-                <ConfirmDeleteDialog />
-                
-                <AcceptDialog/>
+        <div>
+            {/* ConfirmDeleteDialog se muestra y oculta cuando se espera a confirmDelete() */}
+            <ConfirmDeleteDialog />
 
-                <form className='p-2 pt-4' onSubmit={handleSubmit(onSubmit)}>
-                    <label htmlFor='nombre'>Nombre: &nbsp;</label>
-                    <select name="nombre" className='m-0 p-1 w-1/2 capitalize' onClick={selectOnClick}
-                        {...register("nombre", { required: "Seleccione un usuario" })} >
-                        <option value="" className='text-center'>...</option>
-                        {
-                            users.map((u, index) => {
-                                return <option key={index} value={`${u._id},${u.email},${u.username}`} className='capitalize text-center'>{u.username}</option>
-                            })
-                        }
-                    </select>
-                    {errors.nombre ? <p className='text-error h-6'>{errors.nombre.message}</p> : <p className='h-6'></p>}
+            <AcceptDialog />
+            {
+                loading && <ModalLoading/> /* */
+            }    
 
-                    <br />
-                    <label htmlFor='nombre'>E-mail: &nbsp;</label>
-                    <input className='text-center' disabled value={email} title={email} />
-                    <br />
-                    <br />
+            <Layout>
+                <Card>
+                    <h3 className='p-4 text-center underline text-lg font-medium'>Eliminar Usuario</h3>
 
-                    <input type='submit' value="Eliminar" className='boton'></input>
-                </form>
-            </Card>
-        </Layout>
+                    <form className='p-2 pt-4' onSubmit={handleSubmit(onSubmit)}>
+                        <label htmlFor='nombre'>Nombre: &nbsp;</label>
+                        <select name="nombre" className='m-0 p-1 w-1/2 capitalize' onClick={selectOnClick} id="nombre"
+                            {...register("nombre", { required: "Seleccione un usuario" })} >
+                            <option value="" className='text-center'>...</option>
+                            {
+                                users.map((u, index) => {
+                                    return <option key={index} value={`${u._id},${u.email},${u.username}`} className='capitalize text-center'>{u.username}</option>
+                                })
+                            }
+                        </select>
+                        {errors.nombre ? <p className='text-error h-6'>{errors.nombre.message}</p> : <p className='h-6'></p>}
+
+                        <br />
+                        <label htmlFor='email'>E-mail: &nbsp;</label>
+                        <input className='text-center' disabled value={email} title={email} id="email"/>
+                        <br />
+                        <br />
+
+                        <input type='submit' value="Eliminar" className='boton'></input>
+                    </form>
+                </Card>
+            </Layout>
+        </div>
     )
 }
 

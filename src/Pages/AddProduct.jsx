@@ -125,90 +125,92 @@ const AddProduct = () => {
     }
 
     return (
-        <Layout>
+        <div>
             <AcceptDialog />
             {
                 loading && <ModalLoading />
             }
-            <Card>
-                <h3 className='text-center underline text-lg font-medium'>Agregar producto</h3>
-                <form onSubmit={handleSubmit(onSubmit)} className='p-2 pt-4' ref={formRef}>
+            <Layout>
+                <Card>
+                    <h3 className='text-center underline text-lg font-medium'>Agregar producto</h3>
+                    <form onSubmit={handleSubmit(onSubmit)} className='p-2 pt-4' ref={formRef}>
 
-                    {/*///////////////   Nombre   ////////////////*/}
-                    <label htmlFor="nombre">Nombre: &nbsp;</label>
-                    <input name="nombre" id="nombre" className='input'
-                        {...register("nombre", {
-                            required: "El nombre es requerido.",
-                            pattern: { value: /^[a-zA-Z'-.,\s\d]+$/, message: "El nombre no puede contener caracteres especiales." },
-                            minLength: { value: 3, message: "Nombre muy corto." },
-                            maxLength: { value: 30, message: "Nombre no puede tener mas de 30 caracteres." }
-                        })} />
-                    {errors.nombre ? <p className='text-error h-6'>{errors.nombre.message}</p> : <p className='h-6'></p>}
-
-                    {/*///////////   Categoria   /////////*/}
-                    <label htmlFor="categoria">Categoria &nbsp;</label>
-                    <select name="categoria" id="categoria" className='m-0 p-1'
-                        {...register("categoria", { required: "Seleccione una categoria" })} >
-                        <option value="" className=''>...</option>
-                        {
-                            categories.map((c, index) => <option key={index} value={c._id} className='capitalize'>{c.name}</option>)
-                        }
-                    </select>
-                    {errors.categoria ? <p className='text-error h-6'>{errors.categoria.message}</p> : <p className='h-6'></p>}
-
-                    {/*///////////   Imagen   ///////////*/}
-                    <div className='h-[35vh] grid place-content-center'>
-                        {
-                            loadingImg ?
-                                <Loading /> :
-                                <div className='h-full hover:cursor-pointer' onClick={addImage} >
-                                    <img src={selectedImg} className="h-[35vh] mx-auto object-contain" />
-                                </div>
-                        }
-                    </div>
-                    <div className='m-auto'>
-                        <input type="file" className='hidden' name="inputFile" id="inputFile" accept="image/jpeg, image/png"
-                            {...register('inputFile', {
-                                required: "Seleccione una imagen.",
-                                validate: {
-                                    size: (value) => (value[0].size / 1024 < 6144) || "La imagen debe pesar menos de 6MB",
-                                    tipo: (value) => (["image/jpg", "image/jpeg", "image/png"].includes(value[0].type)) || "Elija otra imagen (.jpg, .jpeg ó .png)"
-                                },
-                                onChange: (value) => cargarImagen(value.target.files[0])
+                        {/*///////////////   Nombre   ////////////////*/}
+                        <label htmlFor="nombre">Nombre: &nbsp;</label>
+                        <input name="nombre" id="nombre" className='input'
+                            {...register("nombre", {
+                                required: "El nombre es requerido.",
+                                pattern: { value: /^[a-zA-Z'-.,\s\d]+$/, message: "El nombre no puede contener caracteres especiales." },
+                                minLength: { value: 3, message: "Nombre muy corto." },
+                                maxLength: { value: 30, message: "Nombre no puede tener mas de 30 caracteres." }
                             })} />
-                        {errors.inputFile ? <p className='text-error text-center h-6'>{errors.inputFile.message}</p> : <p className='h-6'></p>}
+                        {errors.nombre ? <p className='text-error h-6'>{errors.nombre.message}</p> : <p className='h-6'></p>}
 
-                    </div>
+                        {/*///////////   Categoria   /////////*/}
+                        <label htmlFor="categoria">Categoria &nbsp;</label>
+                        <select name="categoria" id="categoria" className='m-0 p-1'
+                            {...register("categoria", { required: "Seleccione una categoria" })} >
+                            <option value="" className=''>...</option>
+                            {
+                                categories.map((c, index) => <option key={index} value={c._id} className='capitalize'>{c.name}</option>)
+                            }
+                        </select>
+                        {errors.categoria ? <p className='text-error h-6'>{errors.categoria.message}</p> : <p className='h-6'></p>}
 
-                    {/*////////   Descripcion   ///////////*/}
-                    <div className='flex'>
-                        <label htmlFor="descripcion">Descripcion: &nbsp;</label>
-                        <textarea name="descripcion" id="descripcion" className='w-3/4 h-12 resize-none'
-                            {...register("descripcion", {
-                                required: "La descripcion es requerida.",
-                                pattern: { value: /^[a-zA-Z!'.,"&%$()#-\s\d]+$/, message: "La descripcion no puede contener caracteres especiales." },
-                                minLength: { value: 3, message: "Descripcion muy corta." },
-                                maxLength: { value: 500, message: "La descripcion no puede tener mas de 500 caracteres." }
+                        {/*///////////   Imagen   ///////////*/}
+                        <div className='h-[35vh] grid place-content-center'>
+                            {
+                                loadingImg ?
+                                    <Loading /> :
+                                    <div className='h-full hover:cursor-pointer' onClick={addImage} >
+                                        <img src={selectedImg} className="h-[35vh] mx-auto object-contain" />
+                                    </div>
+                            }
+                        </div>
+                        <div className='m-auto'>
+                            <input type="file" className='hidden' name="inputFile" id="inputFile" accept="image/jpeg, image/png"
+                                {...register('inputFile', {
+                                    required: "Seleccione una imagen.",
+                                    validate: {
+                                        size: (value) => (value[0].size / 1024 < 6144) || "La imagen debe pesar menos de 6MB",
+                                        tipo: (value) => (["image/jpg", "image/jpeg", "image/png"].includes(value[0].type)) || "Elija otra imagen (.jpg, .jpeg ó .png)"
+                                    },
+                                    onChange: (value) => cargarImagen(value.target.files[0])
+                                })} />
+                            {errors.inputFile ? <p className='text-error text-center h-6'>{errors.inputFile.message}</p> : <p className='h-6'></p>}
+
+                        </div>
+
+                        {/*////////   Descripcion   ///////////*/}
+                        <div className='flex'>
+                            <label htmlFor="descripcion">Descripcion: &nbsp;</label>
+                            <textarea name="descripcion" id="descripcion" className='w-3/4 h-12 resize-none'
+                                {...register("descripcion", {
+                                    required: "La descripcion es requerida.",
+                                    pattern: { value: /^[a-zA-Z!'.,"&%$()#-\s\d]+$/, message: "La descripcion no puede contener caracteres especiales." },
+                                    minLength: { value: 3, message: "Descripcion muy corta." },
+                                    maxLength: { value: 500, message: "La descripcion no puede tener mas de 500 caracteres." }
+                                })} />
+                        </div>
+                        {errors.descripcion ? <p className='text-error h-6'>{errors.descripcion.message}</p> : <p className='h-6'></p>}
+                        <br />
+
+                        {/*//////////   Precio   ////////////*/}
+                        <label htmlFor="precio">Precio: $ </label>
+                        <input type="number" step="0.01" name="precio" id="precio" className='input' placeholder="0.00"
+                            {...register("precio", {
+                                required: "El precio es requerido.",
+                                min: { value: 0, message: "El precio no puede ser menor a $0" },
+                                max: { value: 1000, message: "El precio no puede ser mayor a $1.000" }
                             })} />
-                    </div>
-                    {errors.descripcion ? <p className='text-error h-6'>{errors.descripcion.message}</p> : <p className='h-6'></p>}
-                    <br />
+                        {errors.precio ? <p className='text-error h-6'>{errors.precio.message}</p> : <p className='h-6'></p>}
+                        <br />
 
-                    {/*//////////   Precio   ////////////*/}
-                    <label htmlFor="precio">Precio: $ </label>
-                    <input type="number" step="0.01" name="precio" id="precio" className='input' placeholder="0.00"
-                        {...register("precio", {
-                            required: "El precio es requerido.",
-                            min: { value: 0, message: "El precio no puede ser menor a $0" },
-                            max: { value: 1000, message: "El precio no puede ser mayor a $1.000" }
-                        })} />
-                    {errors.precio ? <p className='text-error h-6'>{errors.precio.message}</p> : <p className='h-6'></p>}
-                    <br />
-
-                    <input type="submit" className='boton py-1 px-2' value="Agregar Producto" />
-                </form>
-            </Card>
-        </Layout>
+                        <input type="submit" className='boton py-1 px-2' value="Agregar Producto" />
+                    </form>
+                </Card>
+            </Layout>
+        </div>
     )
 }
 

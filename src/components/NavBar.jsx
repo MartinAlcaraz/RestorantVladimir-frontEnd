@@ -71,7 +71,7 @@ const NavBar = ({ toggleMenu, hideMenu, allPaths, user, onLine }) => {
     }, [showForm]);
 
     return (
-        <div onClick={hideMenu} className={(onLine ? "top-0" : "top-10") + " z-10 bg-primary fixed w-full flex items-center h-10"}>
+        <div onClick={hideMenu} className={(onLine ? "top-0" : "top-10") + " z-10 bg-primary fixed w-full flex items-center h-10 sm:w-[540px] sm:mx-auto"}>
             <button onClick={(e)=> {e.stopPropagation(); toggleMenu() }} className="z-20 basis-1/12 min-w-[30px]">
                 <img src={menuIcon} className="p-1 text-gray-50" />
             </button>

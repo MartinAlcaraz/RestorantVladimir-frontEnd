@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import CloseIcon from '../icons/CloseIcon.jsx'
 
 
-function Modal({ children, isOpen=false, close }) {
+function Modal({ children, isOpen=false, showClose=true, close }) {
     const claseAnimacionIn = 'animacion-in';    // animacion para la entrada de la ventana
     const claseAnimacionOut = 'animacion-out';  // animacion para la salida de la ventana
 
@@ -13,7 +13,7 @@ function Modal({ children, isOpen=false, close }) {
         return null;
     }
 
-    function closeEdit() {
+    function closeModal() {
         setAnimacion(claseAnimacionOut);
         setTimeout(() => {
             close();    // close() setea la variable isOpen en false;
@@ -21,9 +21,9 @@ function Modal({ children, isOpen=false, close }) {
     }
 
     return createPortal(
-        <div onClick={closeEdit} className="p-6 pt-1 pb-24 fixed top-10 left-0 w-full h-full z-30 overflow-y-auto bg-gray-700/50 scrollbar-hide">
+        <div onClick={closeModal} className="min-h-[98vh] fixed pt-1 pb-24 w-full h-full z-30 overflow-y-auto bg-gray-700/50 scrollbar-hide sm:w-[540px] sm:mx-auto">
             <div className={" " + animacion} onClick={(e) => e.stopPropagation()}>
-                <button className="ml-auto block" onClick={closeEdit}><CloseIcon className="h-6 w-6" /></button>
+                { showClose && <button className="ml-auto block" onClick={closeModal}><CloseIcon className="h-6 w-6 mr-2" /></button>}
                 {children}
             </div>
         </div>,

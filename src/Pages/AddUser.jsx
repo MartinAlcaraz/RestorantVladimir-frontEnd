@@ -78,69 +78,69 @@ function AddUser({ user }) {
 
 
     return (
-        <Layout>
-            <Card>
-                <h1 className='text-xl text-center underline capitalize'>Agregar Usuario</h1>
+        <div>
+            {
+                !(loading || allowShowLoading) && <AcceptDialog />   /* cuando se cierra el loading se muestra el mensage */
+            }
+            {
+                (loading || allowShowLoading) && <ModalLoading />    /* permite mostrar el loading al menos 1 segundo */
+            }
+            <Layout>
+                <Card>
+                    <h1 className='text-xl text-center underline capitalize'>Agregar Usuario</h1>
 
-                {
-                    !(loading || allowShowLoading) && <AcceptDialog />   /* cuando se cierra el loading se muestra el mensage */
-                }
+                    <form onSubmit={handleSubmit(onSubmit)} className='p-2 pt-4'>
 
-                {
-                    (loading || allowShowLoading) && <ModalLoading />    /* permite mostrar el loading al menos 1 segundo */
-                }     
+                        {/*///////////////   Nombre   ////////////////*/}
+                        <label htmlFor="nombre">Nombre del usuario: &nbsp;</label>
+                        <br />
+                        <input type="text" name="nombre" className='input' autoFocus id="nombre"
+                            {...register("nombre", {
+                                required: "El nombre es requerido.",
+                                pattern: { value: /^[a-zA-Z'-.,\s\d]+$/, message: "El nombre no puede contener caracteres especiales." },
+                                minLength: { value: 3, message: "Nombre muy corto." },
+                                maxLength: { value: 15, message: "Nombre no puede tener mas de 15 caracteres." }
+                            })} />
+                        {errors.nombre ? <p className='text-error h-6'>{errors.nombre.message}</p> : <p className='h-6'></p>}
 
-                <form onSubmit={handleSubmit(onSubmit)} className='p-2 pt-4'>
+                        {/*///////////////   Email   ////////////////*/}
+                        <label htmlFor="email">Email del usuario: &nbsp;</label>
+                        <br />
+                        <input type="email" name="email" className='input' id="email"
+                            {...register("email", {
+                                required: "El email es requerido.",
+                                pattern: { value: /^([\w-]\.?)+@([\w-]+\.)+([A-Za-z]{2,4})+$/, message: "E-mail incorrecto." },
+                                maxLength: { value: 30, message: "El email no puede tener mas de 50 caracteres." }
+                            })} />
+                        {errors.email ? <p className='text-error h-6'>{errors.email.message}</p> : <p className='h-6'></p>}
 
-                    {/*///////////////   Nombre   ////////////////*/}
-                    <label htmlFor="nombre">Nombre del usuario: &nbsp;</label>
-                    <br />
-                    <input type="text" name="nombre" className='input' autoFocus
-                        {...register("nombre", {
-                            required: "El nombre es requerido.",
-                            pattern: { value: /^[a-zA-Z'-.,\s\d]+$/, message: "El nombre no puede contener caracteres especiales." },
-                            minLength: { value: 3, message: "Nombre muy corto." },
-                            maxLength: { value: 15, message: "Nombre no puede tener mas de 15 caracteres." }
-                        })} />
-                    {errors.nombre ? <p className='text-error h-6'>{errors.nombre.message}</p> : <p className='h-6'></p>}
+                        {/*///////////////   Password   ////////////////*/}
+                        <label htmlFor="password">Password: &nbsp;</label>
+                        <br />
+                        <input type="password" name="password" className='input' id="password"
+                            {...register("password", {
+                                required: "El password es requerido.",
+                                minLength: { value: 4, message: "El password muy corto." },
+                                maxLength: { value: 10, message: "El password no puede tener mas de 10 caracteres." }
+                            })} />
+                        {errors.password ? <p className='text-error h-6'>{errors.password.message}</p> : <p className='h-6'></p>}
 
-                    {/*///////////////   Email   ////////////////*/}
-                    <label htmlFor="email">Email del usuario: &nbsp;</label>
-                    <br />
-                    <input type="email" name="email" className='input'
-                        {...register("email", {
-                            required: "El email es requerido.",
-                            pattern: { value: /^([\w-]\.?)+@([\w-]+\.)+([A-Za-z]{2,4})+$/, message: "E-mail incorrecto." },
-                            maxLength: { value: 30, message: "El email no puede tener mas de 50 caracteres." }
-                        })} />
-                    {errors.email ? <p className='text-error h-6'>{errors.email.message}</p> : <p className='h-6'></p>}
+                        {/*///////////////  confirm Password   ////////////////*/}
+                        <label htmlFor="confirmPassword">Confirm Password: &nbsp;</label>
+                        <br />
+                        <input type="password" name="confirmPassword" className='input' id="confirmPassword"
+                            {...register("confirmPassword", {
+                                required: "El password es requerido.",
+                                validate: (value) => getValues("password") == value || "El password no coincide."
+                            })} />
+                        {errors.confirmPassword ? <p className='text-error h-6'>{errors.confirmPassword.message}</p> : <p className='h-6'></p>}
 
-                    {/*///////////////   Password   ////////////////*/}
-                    <label htmlFor="password">Password: &nbsp;</label>
-                    <br />
-                    <input type="password" name="password" className='input'
-                        {...register("password", {
-                            required: "El password es requerido.",
-                            minLength: { value: 4, message: "El password muy corto." },
-                            maxLength: { value: 10, message: "El password no puede tener mas de 10 caracteres." }
-                        })} />
-                    {errors.password ? <p className='text-error h-6'>{errors.password.message}</p> : <p className='h-6'></p>}
+                        <input type="submit" className='boton py-1 px-2' value="Agregar usuario" />
 
-                    {/*///////////////  confirm Password   ////////////////*/}
-                    <label htmlFor="confirmPassword">Confirm Password: &nbsp;</label>
-                    <br />
-                    <input type="password" name="confirmPassword" className='input'
-                        {...register("confirmPassword", {
-                            required: "El password es requerido.",
-                            validate: (value) => getValues("password") == value || "El password no coincide."
-                        })} />
-                    {errors.confirmPassword ? <p className='text-error h-6'>{errors.confirmPassword.message}</p> : <p className='h-6'></p>}
-
-                    <input type="submit" className='boton py-1 px-2' value="Agregar usuario" />
-
-                </form>
-            </Card>
-        </Layout>
+                    </form>
+                </Card>
+            </Layout>
+        </div>
     )
 }
 

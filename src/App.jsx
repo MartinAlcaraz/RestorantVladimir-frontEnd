@@ -52,18 +52,18 @@ function App() {
 
   const allRoutes = (
     <Routes>
-      <Route path='/' element={<Main user={user} setUnloggedUser={setUnloggedUser}/>} />
+      <Route path='/' element={<Main user={user} setUnloggedUser={setUnloggedUser} />} />
 
-      <Route path='/platos' element={<Productos categoria='platos' user={user}/>} />
-      <Route path='/bebidas' element={<Productos categoria='bebidas' user={user}/>} />
+      <Route path='/platos' element={<Productos categoria='platos' user={user} />} />
+      <Route path='/bebidas' element={<Productos categoria='bebidas' user={user} />} />
 
-      <Route path='/postres' element={<Productos categoria='postres' user={user}/>} />
+      <Route path='/postres' element={<Productos categoria='postres' user={user} />} />
 
       <Route path='/search' element={<Search />} />
 
       <Route path='/login' element={<Login />} />
 
-      <Route path="/error" element={<ErrorPage />}/>
+      <Route path="/error" element={<ErrorPage />} />
 
       <Route path='/*' element={<NotFound />} />
 
@@ -92,7 +92,8 @@ function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <div className='h-full relative min-h-[98vh] bg-white'>
+        <div className='h-full w-full relative min-h-[98vh] bg-white sm:w-[540px] sm:mx-auto'>
+          <div id="portal"></div>
 
           {showModalMenu ? <ModalMenu hideMenu={hideMenu} onLine={onLine} /> : <></>}
 
@@ -108,12 +109,12 @@ function App() {
             }
           </div>
 
-          <NavBar toggleMenu={toggleMenu} hideMenu={hideMenu} allPaths={allPaths} user={user} onLine={onLine}/>
+          <NavBar toggleMenu={toggleMenu} hideMenu={hideMenu} allPaths={allPaths} user={user} onLine={onLine} />
           <div className='mt-10'>
-            
+
             {allRoutes}  {/* rutas */}
 
-            <Footer user={user} setUnloggedUser={setUnloggedUser}/>
+            <Footer user={user} setUnloggedUser={setUnloggedUser} />
           </div>
         </div>
       </BrowserRouter>

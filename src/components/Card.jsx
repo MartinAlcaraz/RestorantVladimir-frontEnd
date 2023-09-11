@@ -1,9 +1,9 @@
 import React from 'react'
 
-function Card(props) {
+function Card({children, style='p-4'}) {
   return (
-    <div className={'bg-card rounded-md shadow-md shadow-black p-4 my-3'}>
-        {props.children}
+    <div className={'bg-card rounded-md shadow-md shadow-black my-3 '+style}>
+        {children}
     </div>
   )
 }

@@ -131,19 +131,20 @@ const EditProduct = ({ closeEdit, openEdit, _id, name, price, description, categ
     if (!openEdit) { return; }
 
     return (
-        <Modal isOpen={openEdit} close={closeEdit}>
+        <Modal isOpen={openEdit} close={closeEdit} showClose={true}>
             <AcceptDialog />
             {
                 loading && formSubmitted && <ModalLoading /> // loading fetch
             }
-            <Card >
+
+            <Card style="m-4 py-2">
 
                 <h3 className='text-center underline text-lg font-medium'>Editar producto</h3>
                 <form onSubmit={handleSubmit(onSubmit)} className='p-2 pt-4' >
 
                     {/*///////////////   Nombre   ////////////////*/}
                     <label htmlFor="nombre">Nombre: &nbsp;</label>
-                    <input name="nombre" className='input'
+                    <input name="nombre" className='input' id="nombre"
                         {...register("nombre", {
                             required: "El nombre es requerido.",
                             pattern: { value: /^[a-zA-Z'-.,\s\d]+$/, message: "El nombre no puede contener caracteres especiales." },
@@ -154,7 +155,7 @@ const EditProduct = ({ closeEdit, openEdit, _id, name, price, description, categ
 
                     {/*///////////   Categoria   /////////*/}
                     <label htmlFor="categoria">Categoria &nbsp;</label>
-                    <select name="categoria" className='m-0 p-1'
+                    <select name="categoria" className='m-0 p-1' id="categoria"
                         {...register("categoria", { required: "Seleccione una categoria" })} >
                         <option value="" className=''>...</option>
                         {
@@ -194,7 +195,7 @@ const EditProduct = ({ closeEdit, openEdit, _id, name, price, description, categ
                     {/*////////   Descripcion   ///////////*/}
                     <div className='flex'>
                         <label htmlFor="descripcion">Descripcion: &nbsp;</label>
-                        <textarea name="descripcion" className='w-3/4 h-12 resize-none'
+                        <textarea name="descripcion" className='w-3/4 h-12 resize-none' id="descripcion"
                             {...register("descripcion", {
                                 required: "La descripcion es requerida.",
                                 pattern: { value: /^[a-zA-Z!'.,"&%$()#-\s\d]+$/, message: "La descripcion no puede contener caracteres especiales." },
@@ -207,7 +208,7 @@ const EditProduct = ({ closeEdit, openEdit, _id, name, price, description, categ
 
                     {/*//////////   Precio   ////////////*/}
                     <label htmlFor="precio">Precio: $ </label>
-                    <input type="number" step="0.01" name="precio" className='input' placeholder="0.00"
+                    <input type="number" step="0.01" name="precio" className='input' placeholder="0.00" id="precio"
                         {...register("precio", {
                             required: "El precio es requerido.",
                             min: { value: 0, message: "El precio no puede ser menor a $0" },

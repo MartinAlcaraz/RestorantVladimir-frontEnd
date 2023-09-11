@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import Modal from './Modal';
-import Card from './Card';
 import useFetch from '../Utils/useFetch';
-import Loading from './Loading';
 import useModalDialog from '../Utils/useModalDialog';
 import useConfirmDelete from '../Utils/useConfirmDelete';
 import ModalLoading from './ModalLoading';
 
-function DeleteProduct({ isOpen, closeDelete, name, _id, refreshData }) {
+function DeleteProduct({ closeDelete, name, _id, refreshData }) {
 
     const [errorMessage, loading, sendHttpRequest] = useFetch();
     const [AcceptDialog, setModalDialog, acceptDialog] = useModalDialog();
-    const [showAnswer, setShowAnswer] = useState(true);
 
     const [ConfirmDeleteDialog, confirmDelete] = useConfirmDelete('Eliminar producto', 'Esta seguro que desea eliminar el producto', name); // return a Component and a function
 
@@ -30,7 +26,6 @@ function DeleteProduct({ isOpen, closeDelete, name, _id, refreshData }) {
 
     const deleteProduct = () => {
         sendHttpRequest('/api/products/' + _id, 'DELETE', null, handleDelete);
-        setShowAnswer(false);   // se oculta la pregunta para mostrar la notificacion
     }
 
     if (errorMessage) {
@@ -50,18 +45,18 @@ function DeleteProduct({ isOpen, closeDelete, name, _id, refreshData }) {
     }, []);
 
     return (
-        <Modal isOpen={isOpen} close={closeDelete}>
+        <div>
             {
                 loading && <ModalLoading />
             }
 
-            { /* ConfirmDeleteDialog se muestra y oculta cuando se espera a confirmDelete() */
-                showAnswer ?
-                    < ConfirmDeleteDialog /> :
-                    <AcceptDialog />
-            }
-        </Modal>
+            { /* ConfirmDeleteDialog se muestra y oculta cuando se espera a confirmDelete() */}
+            < ConfirmDeleteDialog />
+
+            { /* AcceptDialog se muestra y oculta cuando se espera a acceptDialog() */}
+            <AcceptDialog />
+
+        </div>
     )
 }
-
 export default DeleteProduct;
