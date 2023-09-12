@@ -15,7 +15,7 @@ function DeleteProduct({ closeDelete, name, _id, refreshData }) {
         if (res.status == 200) {
             setModalDialog("Exito", "El producto se ha eliminado!", false);
         } else {
-            setModalDialog("Error", "El producto no se ha eliminado!", true);
+            setModalDialog("Error", "Solo el administrador puede eliminar los productos.", true);
         }
         let accepted = await acceptDialog();
         if (accepted || !accepted) {

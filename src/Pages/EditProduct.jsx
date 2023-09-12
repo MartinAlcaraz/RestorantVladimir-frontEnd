@@ -56,7 +56,8 @@ const EditProduct = ({ closeEdit, openEdit, _id, name, price, description, categ
     }
 
     const editProductHandler = async (res, data) => {
-
+        console.log(res);
+        console.log(data);
         if (res.status == 200) {
             setModalDialog("Exito", "El producto se ha modificado!", false);
             setSelectedImg(iconImage);
@@ -69,9 +70,19 @@ const EditProduct = ({ closeEdit, openEdit, _id, name, price, description, categ
             if (res.status == 409) {
                 setError("nombre", { message: "El nombre del producto ya existe." });
             } else {
-                navigate('/error');
+                if (res.status == 403) {
+                    setModalDialog("Error", "Solo el administrador puede editar los productos.", true);
+                    setSelectedImg(iconImage);
+                    let accepted = await acceptDialog();
+                    if (accepted || !accepted) {
+                        reset();
+                    }
+                } else {
+                    navigate('/error');
+                }
             }
         }
+
         setFormSubmitted(false);
     }
 
