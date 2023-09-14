@@ -1,13 +1,8 @@
 <h1 align="center"> Vladimir Restorant</h1>
 <p align="center" >
-  <img height="400" width="auto" src="https://res.cloudinary.com/imagenes-cloudinary/image/upload/v1694524606/RestoVladimir%20Screens/Captura01_wak0am.jpg"/> 
-  <img height="400" width="auto" src="https://res.cloudinary.com/imagenes-cloudinary/image/upload/v1694524606/RestoVladimir%20Screens/Captura02_ezh3jo.jpg"/> 
-  <img height="400" width="auto" src="https://res.cloudinary.com/imagenes-cloudinary/image/upload/v1694524606/RestoVladimir%20Screens/Captura03_yrhxuh.jpg"/> 
-  
-  <!--<img height="500" width="auto" src="https://res.cloudinary.com/imagenes-cloudinary/image/upload/v1694524606/RestoVladimir%20Screens/Captura04_ullyjr.jpg"/> 
-  <img height="500" width="auto" src="https://res.cloudinary.com/imagenes-cloudinary/image/upload/v1694524605/RestoVladimir%20Screens/Captura05_tehuv9.jpg"/> 
-  <img height="500" width="auto" src="https://res.cloudinary.com/imagenes-cloudinary/image/upload/v1694524606/RestoVladimir%20Screens/Captura06_k3ywub.jpg"/> -->
-
+<img height="400" width="auto"  src="https://github.com/MartinAlcaraz/RestorantVladimir-frontEnd/assets/96241107/7fa915ee-4424-4f00-ad7d-8830adb629ee"/>
+  <img height="400" width="auto" src="https://github.com/MartinAlcaraz/RestorantVladimir-frontEnd/assets/96241107/5ee959f3-99be-4ac5-88a2-0907442dc32c"/>
+  <img height="400" width="auto" src="https://github.com/MartinAlcaraz/RestorantVladimir-frontEnd/assets/96241107/3f563367-ff1f-44bb-963a-6ea5577bc775"/>
 </p> 
 
 Menu de restorant con sesion de usuario, para crear el menu y editarlo.
@@ -36,7 +31,3 @@ Nombre de usuario y contraseña para ingresar a la aplicacion.
 
 ## Demo
 https://github.com/MartinAlcaraz/RestorantVladimir-frontEnd/assets/96241107/44b3745b-5d39-4529-a896-17afe0a8ff88
-
-
-
-
